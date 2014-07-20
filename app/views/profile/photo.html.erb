@@ -1,0 +1,58 @@
+<%= hidden_field_tag "active-side-nav-link", "photo" %>
+
+<div class="well">
+  <h2>Your profile photo</h2>
+
+  <div class="helper">
+    <p>Add your photo now ! Other members will be reassured to see with whom they'll be travelling, and you'll find your
+      car share much more easily. Photos also help members recognizing each other</p>
+  </div>
+  <div class="row">
+    <div class="profile-photo-container col-sm-2">
+      <%= image_tag @profile.picture("profile"), alt: "#{@profile.get_displayed_as} (#{@profile.user.age})", style: "width: 108px; height: 108px", class: "pull-left" %>
+    </div>
+    <div class="col-sm-9">
+      <%= form_for @profile, url: upload_photo_profile_path(@profile), html: { multipart: true, role: 'form' } do |f| %>
+      <span class="btn btn-link fileinput-button">
+        <span><strong>Upload photo</strong></span>
+        <%= f.file_field :photo, required: true, accept: "image/*", class: 'upload-attachment' %>
+      </span>
+          <span>Choose a photo (Max: 2MB)</span>
+          <%= handle_error_text(@profile, :photo) %>
+      <% end %>
+      <ul class="indented">
+        <li class="photo-fb">
+          <%#= link_to "Upload my Facebook photo", user_omniauth_authorize_path(:facebook) %>
+        </li>
+      </ul>
+
+      <div class="photo-area">
+        <div class="pnl-info">
+          <div class="inner-content">
+            <p>
+              Your face must be recognisable (without sunglasses) for your photo to be approved. Make sure to upload a
+              PNG or JPG file. </p>
+            <ul class="unstyled photo-examples margin-top clearfix">
+              <li class="pull-left col-lg-offset-1">
+                <span class="green success">Photo accepted</span>
+                <img src="<%= asset_path('profile/img-accepted.jpg') %>" class="display-block" alt="A photo that makes it easy to recognize the person's face">
+              </li>
+              <li class="pull-left col-lg-offset-2">
+                <span class="red error">Photos refused</span>
+                <img src="<%= asset_path('profile/img-refused.jpg') %>" class="display-block" alt="A photo taken from the side, with sunglasses or with other people on it.">
+              </li>
+            </ul>
+            <p class="margin-top">For more information on how to best pick your profile photo, please
+              <a href="javascript:void(0);" class="blue">check our FAQ</a></p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+  
+  

@@ -1,0 +1,230 @@
+.user .photo {
+	border-radius: 3px;
+	float: left;
+	margin-top: 1px;
+}
+
+.user-info {
+	float: left;
+	font-size: 12px;
+	margin: 0 0 0 8px;
+	padding-top: 6px;
+	width: 95px;
+}
+
+.user-info .username {
+	margin-bottom: 2px;
+}
+
+.user h2 {
+	color: #333333;
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 1;
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.user .user-trust, .user .photo {
+	margin-left: 10px;
+}
+
+.user-trust {
+	clear: both;
+	font-size: 12px;
+	padding-top: 4px;
+}
+
+.user-trust .rating-container .star-rating {
+	display: inline-block;
+	margin: -2px 5px 0 0;
+}
+
+.user-trust .preferences-container {
+	clear: both;
+}
+
+.user .verifications, .user .prefs {
+	display: inline;
+	padding: 0;
+}
+
+.prefs.blabla {
+	background-position: 0 -52px;
+}
+
+.prefs.blabla {
+	background-position: 0 -52px;
+}
+
+.prefs {
+	background-color: rgba(0, 0, 0, 0);
+	background-image: url("/images/icons/sprite-prefs.png");
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	display: block;
+	float: left;
+	height: 26px;
+	margin-right: 5px;
+	text-indent: -10000px;
+	width: 26px;
+}
+
+.prefs.no-smoking {
+	background-position: 0 -260px;
+}
+
+.prefs.no-pet {
+	background-position: 0 -572px;
+}
+
+.prefs.music {
+	background-position: 0 -312px;
+}
+
+.trip-search-oneresult .description {
+	margin: 0 0 0 5px;
+	width: 370px;
+
+}
+
+.price-red {
+	color: #C93634;
+}
+
+.trip-search-oneresult .price {
+	margin-bottom: 1px;
+	min-height: 61px;
+}
+
+.trip-search-oneresult .price strong {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 34px;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+.description .time {
+	color: #0FAAF0;
+	font-size: 19px;
+	font-weight: bold;
+	line-height: 27px;
+}
+
+.car-type {
+	margin-top: 8px;
+}
+
+.geo-from, .geo-to, .car-type {
+	color: #666666;
+	line-height: 22px;
+	margin: 0;
+}
+
+.trip-search-oneresult {
+	background: #fff;
+	display: block;
+	overflow: hidden;
+     border-color: #EEEEEE;
+    border-style: solid;
+    border-width: 1px 0 0;
+    padding: 10px 0;
+    color: #000000;
+}
+
+.trip-search-oneresult:hover {
+	background: #EAF9FE;
+	color: #666666;
+}
+
+.side {
+	border: 1px solid #CCCCCC;
+	background: #F1F1E9;
+	border-radius: 6px !important;
+}
+
+.side hr {
+	border-color: #ccc;
+}
+
+.hero-unit > input {
+	border: 1px solid #CCCCCC;
+	border-radius: 4px !important;
+}
+
+.counter {
+	margin: 0 0 0 9px;
+	color: #939288;
+}
+
+.price-green {
+	color: #68BE57;
+}
+
+.price-orange {
+	color: #FF9802;
+}
+
+.price-red {
+	color: #C93634;
+}
+
+.ride-info-maps-input {
+	display: inline-block;
+	width: 30%;
+	margin: 10px;
+}
+.ride-place{
+    background: url("ride/location-stage.png") no-repeat;
+    padding: 0 0 10px 24px;
+}
+.dropdown-menu li .active{
+    background: #eee;
+}
+.user-preference,
+.user-age{
+font-size: 19px;
+color: #656565;
+}
+.departure_date_input{
+	padding: 4px 5px;
+}
+.blabla big-prefs tip{
+background:url(/images/icons/pref-blabla-large.png) no-repeat;
+}
+.member-bio{
+background: #E5F3FF;
+border-radius: 3px;
+font-size: 22px;
+line-height: 33px;
+margin: 22px 17px 0 0;
+padding: 18px;
+position: relative;
+}
+.car-add {
+margin: 0;
+
+}
+.car-add li{ padding: 0 0 6px; text-align: center;}
+.profile-db span{ margin: 0 0 5px; font-size: 15px; display: inline-block;}
+.profile-db strong {
+font-weight: normal;
+font-size: 25px;
+margin: 0 0 7px;
+display: inline-block;
+}
+.profile-pic img{ 
+	margin: 0 auto; 
+	padding: 3px 0 13px;
+}
+.profile-pic{ 
+	padding: 7px;
+	box-shadow: 1px 1px 8px 3px #888888;
+	overflow: hidden;
+	margin:0 0 21px;
+}
+.show-upload-car form{
+	margin: -20px 0 0 0;
+}
+

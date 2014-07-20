@@ -1,0 +1,43 @@
+<!--Begin Sidebar Menu-->
+<div class="profile-sidenav">
+
+  <ul class="list-group sidebar-nav-v1">
+    <li class="list-group-item add"><span>Profile information</span></li>
+    <li class="list-group-item general">
+      <%= link_to "Personal information", general_profile_index_path %>
+    </li>
+    <li class="list-group-item photo">
+      <%= link_to "Photo", photo_profile_index_path %>
+    </li>
+    <li class="list-group-item preferences">
+      <%= link_to "Preferences", '/profile/preferences' %>
+    </li>
+    <li class="list-group-item verifications">
+      <%= link_to "Verifications", verifications_profile_index_path %>
+    </li>
+    <li class="list-group-item cars">
+      <%= link_to "Car", cars_path %>
+    </li>
+    <li class="list-group-item address">
+      <%= link_to "Postal address", address_profile_index_path %>
+    </li>
+  </ul>
+
+
+  <ul class="list-group sidebar-nav-v1">
+    <li class="list-group-item add"><span>Account</span></li>
+    <li class="list-group-item notifications">
+      <%= link_to "Notifications", '/profile/notifications' %>
+    </li>
+    <li class="list-group-item social_sharing">
+      <%= link_to "Social sharing", '/profile/social_sharing' %>
+    </li>
+    <li class="list-group-item password">
+      <%= link_to "Password", edit_user_registration_path %>
+    </li>
+    <li class="list-group-item delete_account">
+      <%= link_to "Delete my account", account_unsubscribes_path %>
+    </li>
+  </ul>
+
+</div>

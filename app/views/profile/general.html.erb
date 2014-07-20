@@ -1,0 +1,108 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#user_phone_number_attributes_country_id").change(function () {
+            format = $(this).find(":selected").data("format");
+            $("#user_phone_number_attributes_body").attr('placeholder', format);
+        });
+    });
+</script>
+<%= hidden_field_tag "active-side-nav-link", "general" %>
+<%= form_for @user, url: update_general_info_profile_index_path, html: { class: 'well form-horizontal', role: 'form' } do |user_form| %>
+
+    <fieldset>
+      <h2>My personal information</h2>
+
+      <div class="form-group">
+        <%= user_form.label :gender, class: "col-sm-2 control-label" %>
+        <div class="col-sm-4">
+          <p class="form-control-static"><%= @user.gender %></p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= user_form.label :first_name, class: "col-sm-2 control-label" %>
+        <div class="col-sm-4">
+          <%= user_form.text_field :first_name, class: "form-control" %>
+          <%= handle_error_text(@user, :first_name) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= user_form.label :last_name, class: "col-sm-2 control-label" %>
+        <div class="col-sm-4">
+          <%= user_form.text_field :last_name, class: "form-control" %>
+          <%= handle_error_text(@user, :last_name) %>
+        </div>
+      </div>
+      <%= user_form.hidden_field :enable_profile_validation, value: true %>
+      <%= user_form.fields_for :profile, @profile do |profile_form| %>
+
+          <div class="form-group">
+            <%= profile_form.label :displayed_as, class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= profile_form.select :displayed_as, [[@user.display_first_name, 0], [@user.display_first_last_name, 1]], {}, class: "form-control", selected: "#{@profile.displayed_as}" %>
+            </div>
+          </div>
+      <% end %>
+      <!-- end of field_for -->
+    </fieldset>
+    <fieldset>
+      <div class="form-group">
+        <%= user_form.label :email, class: "col-sm-2 control-label" %>
+        <div class="col-sm-8">
+          <%= user_form.email_field :email, class: "form-control" %>
+          <%= handle_error_text(@user, :email) %>
+        </div>
+      </div>
+      <%= user_form.hidden_field :enable_phone_number_validation, value: true %>
+      <%= user_form.fields_for :phone_number, @phone_number do |phone_form| %>
+
+          <div class="form-group">
+            <%= phone_form.label :body, 'Mobile No', class: "col-sm-2 control-label" %>
+            <div class="col-sm-4">
+              <%= phone_form.select :country_id, {}, {}, class: "form-control" do %>
+                  <%= render '/shared/country_list_options' %>
+              <% end %>
+            </div>
+            <div class="col-sm-4">
+              <%= phone_form.text_field :body, placeholder: @selected_country.country_format, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <div class="checkbox">
+                <%= phone_form.check_box :public_status, style: "margin: 4px 9px 0 0;" %>
+                <%= phone_form.label :public_status, "Never show my phone number online" %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+    </fieldset>
+    <fieldset>
+      <div class="form-group">
+        <%= user_form.label :birth_year, class: "col-sm-2 control-label" %>
+        <div class="col-sm-4">
+          <%= user_form.select :birth_year, options_for_birth_year_select(@user.birth_year), {}, class: 'form-control' %>
+          <%= handle_error_text(@user, :birth_year) %>
+        </div>
+      </div>
+
+      <%= user_form.fields_for :profile, @profile do |profile_form| %>
+
+          <div class="form-group">
+            <%= profile_form.label :mini_bio, class: "col-sm-2 control-label" %>
+            <div class="col-sm-8">
+              <%= profile_form.text_area :mini_bio, class: "form-control", rows: 4 %>
+            </div>
+          </div>
+      <% end %>
+
+    </fieldset>
+
+    <div class="col-sm-offset-2">
+      <%= user_form.submit 'Save', class: "btn btn-primary" %>
+
+    </div>
+<% end %>
+<!-- end of form_for -->

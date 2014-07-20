@@ -1,0 +1,54 @@
+<%= hidden_field_tag "active-side-nav-link", "delete_account" %>
+<div class="well">
+  <%= form_for @unsubscribe, url: delete_account_unsubscribes_path, html: { role: "form", method: :delete } do |f| %>
+      <fieldset>
+        <h2>Delete my account</h2>
+
+        <p>
+          If you would like to delete your account because you weren't able to solve a problem, please allow us to
+          suggest some tips that may be of use:
+        </p>
+        <ul>
+          <li>To change your phone number or your email address, you
+            can <%= link_to "edit your profile", general_profile_index_path %>.
+          </li>
+          <li>To hide your phone number, you can <%= link_to "edit your profile", general_profile_index_path %>.</li>
+          <li>To resolve a technical issue, please <a href="javascript:void(0);">contact us</a>.</li>
+          <li>To stop receiving emails, you can <%= link_to "edit your profile.", '/profile/notifications' %>.</li>
+          <li>To deal with a rating that you feel is unjustified,
+            please <%= link_to "contact us", "javascript:void(0);" %> (if this is the case, do not delete your account
+            -- you will not be able to create a new account).
+          </li>
+        </ul>
+        <p>
+          If you still want to delete your account, please help us improve our service by letting us know why.
+        </p>
+
+        <section>
+
+          <div class="form-group">
+            <%= f.label :unsubscribe_reason_id, "Reason" %>
+            <%= handle_error_text(@unsubscribe, :unsubscribe_reason_id) %>
+            <%= f.select :unsubscribe_reason_id, options_from_collection_for_select(UnsubscribeReason.all, :id, :name), { prompt: "Choose" }, class: "form-control", required: true %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :recommend, "Would you recommend La Mule?" %>
+            <%= handle_error_text(@unsubscribe, :recommend) %>
+            <%= f.select :recommend, [['Yes', 0], ['No', 1]], { prompt: "Choose" }, class: "form-control", required: true %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :comment, "What could we improve?" %>
+            <%= handle_error_text(@unsubscribe, :comment) %>
+            <%= f.text_area :comment, class: "form-control", rows: "6", cols: "40", required: true %>
+          </div>
+        </section>
+        <div>
+          <%= f.submit 'Delete my account', class: "btn btn-danger" %>
+
+        </div>
+      </fieldset>
+  <% end %>
+</div>
+

@@ -1,0 +1,58 @@
+<%# add navigation links to this file %>
+
+<% if user_signed_in? %>
+    <li>
+        <% @unread_received_message_threads_count =  current_user.message_threads.joins(:messages).distinct.where("message_threads.status = ? AND message_threads.unread = ? AND messages.message_type = ?", GlobalConstants::MessageThreads::STATUS[:active], true, GlobalConstants::Messages::TYPE[:received]).count %>
+        <% if @unread_received_message_threads_count == 0 %>
+            <%= link_to "", "/messages/received", class: "home-messages" %>
+        <% else %>
+            <%= link_to "#{content_tag(:span, @unread_received_message_threads_count, class: 'notification')}".html_safe, "/messages/received", class: "home-messages" %>
+        <% end %>
+    </li>
+    <li>
+      <a class="dropdown-toggle user-info-nav" data-toggle="dropdown" href="javascript:void(0);">
+        <%= image_tag 'user/icon-man.png' %>
+        <%= current_user.first_name || current_user.name %>
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li><%= link_to "Offer A ride", '/offer-seats/1' %></li>
+        <li><%= link_to "Rides offered", rides_path %></li>
+        <li><%= link_to "Messages", "/messages/received" %></li>
+        <li><%= link_to "profile", general_profile_index_path %></li>
+        <li><%= link_to 'Sign out', destroy_user_session_path, :method => 'delete' %></li>
+      </ul>
+    </li>
+
+<% else %>
+    <li><%= link_to 'join', new_user_registration_path %></li>
+    <div id="login-form-data" class="hide"></div>
+    <li><%= link_to 'login', 'javascript:void(0);', class: 'login-btn', data: { container: 'body', toggle: 'popover', placement: 'bottom', content: "", html: 'true' } %></li>
+    <li><%= link_to 'How it works', "javascript:void(0);" %></li>
+<% end %>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        <% unless user_signed_in? %>
+        if ($('.login-btn') && $('.login-btn').attr('data-content') == '') {
+            $.ajax({
+                url: '/users/sign_in',
+                data: {
+                    layout_false: 'true'
+                },
+                dataType: 'html',
+                success: function (data) {
+                    $("#login-form-data").html(data);
+                    $('#login-form-data .authform').addClass('login-popover');
+                    $('.login-btn').popover({
+                        content: function () {
+                            return $("#login-form-data").html();
+                        }
+                    });
+                }
+            });//end of ajax
+        }
+        <% end %>
+    });
+</script>

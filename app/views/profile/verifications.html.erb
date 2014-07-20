@@ -1,0 +1,36 @@
+<%= hidden_field_tag "active-side-nav-link", "verifications" %>
+<div class="well">
+  <h2> My verification </h2>
+
+  <div class="email-verification">
+    <h3 class="verifications-title">
+      <% if @user.email_verified.present? %>
+          <p class="text-success">Email: verified</p>
+      <% else %>
+          Email: not verified
+      <% end %>
+    </h3>
+    <div class="verifications-info">
+      Your email address is: <%= @user.email %> ( <%= link_to "edit", general_profile_index_path %> )
+    </div>
+    <% if @user.email_verified.blank? %>
+        <%= link_to "Verify this email address", "/send_verify_email", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <div class="phone-number-verification">
+    <h3 class="verifications-title">
+      <% if @user.phone_number.verified_no? %>
+          <p class="text-success">Phone: verified</p>
+      <% else %>
+          Phone: not verified
+      <% end %>
+    </h3>
+    <div class="verifications-info">
+      Your phone number is: <%= @user.phone_no_with_ext(" ") %> ( <%= link_to "edit", general_profile_index_path %> )
+    </div>
+    <% if @user.phone_number.verified_no.blank? %>
+        <%= link_to "Verify this number", "/fill_phone", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

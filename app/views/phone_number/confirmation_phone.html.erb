@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      <div class="box-register">
+        <h2>Mobile Phone Verification number </h2>
+        An SMS has been sent to <%= @phone_number.body %>. You can <a href="/fill_phone">change your number</a> here
+
+        <div class="verify-num">
+          Please Enter the 4 digit code you recieved by SMS
+          <input type="text" name="verification_code" id="verification_code">
+          <a href="javascript:void(0);" id="phone_confirmation_code_submit" class="btn btn-primary btn-sm">Confirm</a>
+
+          <p class="help-block"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard dummy text ever since the 1500s.</p>
+        </div>
+        <div class="field-error" style="display: none;" id="invalid_phone_code"></div>
+        <h3>Why verify my mobile number?</h3>
+
+        <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book.</p>
+      </div>
+    </div>
+  </div>
+</div>

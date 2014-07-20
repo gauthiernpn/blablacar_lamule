@@ -1,0 +1,32 @@
+<% if @rides.present? %>
+<h3>Your all rides</h3>
+<table class="table table-bordered table-striped table-condensed">
+  <thead>
+      <tr>
+        <th>route</th>
+        <th>status</th>
+        <th>Departure time</th>
+        <th></th>
+        
+      </tr>
+  <tbody>
+  <% @rides.each do |ride| %>
+      <tr>
+        <% if ride.full_completed == 0 %> 
+          <td><%= "#{ride.show_sorce_destination_route}" %></td>
+          <td><%= link_to "Publish it!", "/#{ride.id}/offer-seats/2" %></td>
+        <% else %>
+          <td><%= link_to "#{ride.show_sorce_destination_route}", ride_path(ride.id) %></td>
+          <td>Published</td>
+        <% end %>
+        </td>
+        <td><%= set_date_style(ride.departure_date) %></td>
+        <td><%= link_to 'Edit', edit_ride_path(ride), class: "btn btn-primary" %>
+        <%= link_to 'Destroy', ride, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<% else %>
+you have no ride
+<% end %>

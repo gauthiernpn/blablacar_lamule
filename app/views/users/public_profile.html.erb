@@ -1,0 +1,124 @@
+<br/>
+<div class="row">
+  
+  <div class="well col-sm-3 col-md-3">
+    <div class="col-md-12">
+      <div class="main-column-block">
+        <h4 class="main-column-title">Member verifications</h4>
+        <ul class="main-column-list verification-list margin-bottom unstyled">
+          <% if @user.phone_number.verified_no %>
+            <li class="img-phone tip">
+              <span class="checked">
+                <p>phone number verified<p>
+              </span>
+            </li>
+          <% elsif @self_user %>
+            <li class="img-phone tip">
+              <span class="no-checked">
+                <a href="/profile/verifications" class="blue">Verify your phone number</a>
+              </span>
+            </li>
+          <% end %>
+          <% if @user.email_verified %>
+            <li class="img-email tip">
+              <span class="checked">
+                <p>Email verified</p>
+              </span>
+            </li>
+          <% elsif @self_user %>
+            <li class="img-email tip">
+              <span class="no-checked">
+                  <a href="/profile/verifications"> Verify your Email</a>
+              </span>
+            </li>
+          <% end %>
+          <!-- TODO facebook -->
+          <% if @user.provider == "facebook" %>
+            <li class="img-facebook tip">
+              <span class="checked">
+                <p><%= @user.friends.count %> friends</p>
+              </span>
+            </li>
+          <% elsif @self_user %>
+            <li class="img-email tip">
+              <span class="no-checked">
+                  <a href="/profile/social_sharing"> Verify your fb account</a>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <hr>
+      <div class="main-column-block">
+        <h4 class="main-column-title">Member activity</h4>
+        <ul class="main-column-list unstyled margin-bottom">
+          <li class="img-marker clearfix">
+            <div class="activities-text-container">
+              <%= @user.rides.count %>
+              <%= @user.rides.count > 1 ? "rides" : "ride" %> offered
+            </div>
+          </li>
+          <li class="img-clock clearfix">
+            <div class="activities-text-container">
+              Last
+              online: <%= @user.last_sign_in_at.strftime("%m-%d-%y") == Date.today.strftime("%m-%d-%y") ? "Today" : @user.last_sign_in_at.strftime("%d %b %Y") %>
+              - 08:17
+            </div>
+          </li>
+          <li class="img-calendar clearfix">
+            <div class="activities-text-container">
+              Member since: <%= @user.created_at.strftime("%d %b %Y") %>
+            </div>
+          </li>
+        </ul>
+        <% if @user.cars.present? %>
+          <hr>
+          <ul class="car-add inline-block">
+            <li><h3> Your <%= @user.cars.count > 1 ? "cars" : "car" %></h3></li>
+            <% @user.cars.each do |car| %>
+              <%= image_tag car.picture, width: "150", height: "100", style: "width: 150px; height: 100px;" %>
+              <li><strong> <%= car.car_name %> </strong></li>
+              <li>Color: <%= car.color.name %> </li>
+              <li>Comfort: <%= GlobalConstants::CAR_COMFORT_LEVEL[car.level_of_comfort][0] %></li>
+              <hr/>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class=" col-sm-9 col-md-9">
+    <span class="col-md-3">
+      <div class="profile-pic inline-block">
+        <%= image_tag @profile.picture("public_profile"), class: "img-responsive" %>
+      </div>  
+    </span>
+    
+    <div class="col-md-4 profile-db">
+      <strong><%= "#{@user.first_name} #{@user.last_name}" %></strong>
+      <span class="user-age"><%= @user.age %> </span>
+      <span class="user-age"><b>Average rating: </b> No rating yet</span>
+      <span class="user-preference"> <b>Chattiness: </b><%= GlobalConstants::Preferences::LEVELS_TEXT[@user.preference.chattiness] %></span>
+      <span class="user-preference"> <b>Music: </b><%= GlobalConstants::Preferences::LEVELS_TEXT[@user.preference.music] %></span>
+      <span class="user-preference"> <b>Smoking: </b> <%= GlobalConstants::Preferences::LEVELS_TEXT[@user.preference.smoking] %></span>
+      <span class="user-preference"> <b>Pet: </b> <%= GlobalConstants::Preferences::LEVELS_TEXT[@user.preference.pets] %></span>
+    </div>
+    <div class="col-md-10 location">
+      <% if @profile.mini_bio.present? %>
+        <%= @profile.mini_bio %>
+      <% else %>
+          <% if @self_user %>
+            <p class="bg-danger">
+              <%= link_to "Add a mini bio about yourself to make contacting other ride sharers easier.", general_profile_index_path %>
+            </p>
+
+          <% else %>
+            <div class="member-bio clearfix">
+              <span class="bio-bubble"></span>
+              <p>Sorry! I haven't given a mini bio yet</p>
+            </div>
+          <% end %>
+      <% end %>
+      
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="home-driver-container">
+    <a href="/offer-seats/1">
+      <div class="top-bookmark"></div>
+      <div class="homepage-driver">
+        <h2>Driving somewhere?</h2>
+
+        <div class="img-block driver"></div>
+            <span class="cta-driver">
+                <%= image_tag 'dashboard/home-arrow-driver.png', alt: '', width: '19', height: '17', class: 'inline-block' %>
+              <strong>Offer a ride</strong>
+            </span>
+      </div>
+      <div class="bottom-bookmark"></div>
+    </a>
+  </div>
+
+</div>
+
+<div>
+  <div class="col-md-8">
+    <%= form_tag rides_info_rides_path, class: 'form-horizontal' do %>
+
+
+        <h1>Find a ride</h1>
+
+        <div style="margin: 0 0 10px;">Choose from thousands of rides offered by drivers across the Australia,
+          everyday.
+        </div>
+        <div class="row">
+          <div class="col-sm-5 location-holder">
+            <%= text_field_tag :ride_source, nil, autofocus: true, class: 'from gmaps-input-address form-control', placeholder: "From", style:"width:100%;" %>
+          </div>
+          <div class="col-sm-5 location-holder">
+            <%= text_field_tag :ride_destination, nil, autofocus: true, class: 'to gmaps-input-address form-control', placeholder: "To", style: "width:100%;" %>
+          </div>
+          <%= hidden_field_tag :profile_photo, "all" %>
+          <%= hidden_field_tag :order_by, "departure_date ASC" %>
+          <%= hidden_field_tag :start_time, 0 %>
+          <%= hidden_field_tag :last_time, 24 %>
+          <%= submit_tag "Search", name: nil, class: "btn btn-warning col-sm-2" %>
+        </div>
+    <% end %>
+  </div>
+</div>

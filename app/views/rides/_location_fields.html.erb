@@ -1,0 +1,12 @@
+<li>
+  <fieldset class="input-group location-holder">
+    <%= f.text_field :address, autofocus: true, class: 'from form-control stage sub-route-locations gmaps-input-address', placeholder: "Add towns on your route" %>
+    <span class="input-group-addon remove_location"><i class="glyphicon glyphicon-remove"></i></span>
+    <%= f.hidden_field :longitude, class: "input-longitude" %>
+    <%= f.hidden_field :latitude, class: "input-latitude" %>
+    <%= f.hidden_field :ride_type, value: GlobalConstants::Locations::RIDE_TYPES[:sub_route] %>
+    <%= f.hidden_field :sequence, value: 1, class: "input-sequence" %>
+    <%= f.hidden_field :id, value: f.object.id, class: "input-id" %>
+  </fieldset>
+
+</li>

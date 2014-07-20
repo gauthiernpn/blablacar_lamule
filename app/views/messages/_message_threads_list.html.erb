@@ -1,0 +1,44 @@
+<div class="row messages-container">
+  <% if @message_threads.present? %>
+    
+      <% @message_threads.each_with_index do |message_thread| %>
+        <% 
+          @user2 = message_thread.communicator
+          @ride = message_thread.ride
+
+          if message_thread.unread?
+            @holder_unread_class = "unread"    
+          else
+            @holder_unread_class = ""
+          end
+        %>
+
+          <a href="<%= message_thread_path(message_thread.id) %>" class="one-thread">
+        <div class="message-thread-holder <%= @holder_unread_class %>" data-mt-id ="<%= message_thread.id %>" >
+            <div class="col-sm-3">
+              <div class="message-who">
+                <%= image_tag @user2.profile.picture("inbox"), alt: "#{@user2.display_first_last_name} (#{@user2.age})", style: "width: 54px; height: 54px" %>
+
+                <h4><%= @user2.display_first_last_name %></h4>
+              </div>
+            </div>
+            <div class="col-sm-7">
+              <%= render "message_title", message_thread: message_thread %>
+            </div>
+
+            <div class="message-date">
+              <%= date_in_today_format(message_thread.messages.last.created_at) %>
+              <% if comes_from == "archived" %>
+                <button class="close delete-message" type="button" data-from="messages"><i class="glyphicon glyphicon-remove"></i></button>
+              <% else %>
+                <button class="close archive-message" type="button"  data-from="messages"><i class="glyphicon glyphicon-remove"></i></button>
+              <% end %>
+            </div>
+        </div>
+          </a>
+      <% end %>
+
+  <% else %>
+    <p>No messages found</p>
+  <% end %>
+</div>

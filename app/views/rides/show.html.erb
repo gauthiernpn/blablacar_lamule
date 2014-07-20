@@ -1,0 +1,276 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.show-gmap').click(function () {
+            if ($('.gmap-holder').hasClass("hidden")) {
+                $('.gmap-holder').removeClass("hidden");
+                $('#gmaps-canvas').removeClass("hidden");
+                $('.show-gmap.main-show').text("Hide map");
+                if (hasNotMap("gmaps-canvas")) {
+                    drawGMap();
+                }
+            }
+            else {
+                $('.gmap-holder').addClass("hidden");
+                $('#gmaps-canvas').addClass("hidden");
+                $('.show-gmap.main-show').text("Show map");
+            }
+        });
+
+        $('select#ride_car_id').change(function (event) {
+            var target = $(event.target);
+            if (target.val() != '0') {
+                $(target.parents('form').get(0)).submit(); //better ways to do it
+                event.stopPropagation();
+                return false;
+            }
+        });
+
+
+    });
+
+    function hasNotMap(id) {
+        return !document.getElementById(id).firstChild;
+    }
+</script>
+<% @ride.locations.each do |l| %>
+    <% if l.ride_type == GlobalConstants::Locations::RIDE_TYPES[:source] %>
+
+        <%= hidden_field_tag "ride_source", l.address %>
+        <%= hidden_field_tag "ride_source_longitude", l.longitude %>
+        <%= hidden_field_tag "ride_source_latitude", l.latitude %>
+    <% elsif l.ride_type == GlobalConstants::Locations::RIDE_TYPES[:destination] %>
+        <%= hidden_field_tag "ride_destination", l.address %>
+        <%= hidden_field_tag "ride_destination_longitude", l.longitude %>
+        <%= hidden_field_tag "ride_destination_latitude", l.latitude %>
+    <% else %>
+        <%= hidden_field_tag "location_address", l.address, class: "sub-route-locations" %>
+    <% end %>
+<% end %>
+
+<div class="row location">
+<div class="well col-sm-12 col-md-12">
+<% if @self_user %>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="col-md-2 btn-top">
+        <%= link_to 'Edit', edit_ride_path(@ride), class: "btn btn-primary btn-sm" %>
+        <%= link_to 'Delete', @ride, method: :delete, data: { confirm: "Are You Sure?" }, class: "btn btn-danger btn-sm" %>
+      </div>
+    </div>
+<% end %>
+<div class="row">
+<div class="col-lg-12">
+  <h1 class="trip-roads car-sharing">
+                <span class="from trip-roads-stop"><%= @ride.source_location.address %>
+                  <i class="glyphicon glyphicon-arrow-right"></i> <%= @ride.destination_location.address %>
+                </span>
+  </h1>
+</div>
+<div class="well col-sm-8 col-md-8 add">
+  <fieldset>
+    <div class="header-main-block clearfix row">
+      <h2 class="pull-left col-md-9"><%= @ride.source_location.address %>
+        <i class="glyphicon glyphicon-arrow-right"></i> <%= @ride.destination_location.address %></h2>
+      <%= link_to "Show map", "javascript:void(0);", class: "show-gmap main-show" %>
+      <div class="simple-round-container" style="width:97%;">
+        <div class="col-md-12 gmap-holder hidden text-center">
+                <span>
+                  <%= "#{@ride.total_distance}, #{@ride.total_time}" %>
+                </span>
+          <a href="javascript:void(0);" class="show-gmap"><i class="glyphicon glyphicon-remove" style="float:right;"></i></a>
+        </div>
+        <div id="gmaps-canvas" style="height:550px; width:100%;" class="hidden"></div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <%= label_tag 'Pick up point', nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
+          <p class="form-control-static">
+            <%= image_tag asset_path("ride/search-from-plot.png"), class: "location_tag" %>
+            <%= @ride.source_location.address %>
+          </p>
+        </div>
+      </div>
+      <hr class="horizontal-line"/>
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <%= label_tag 'Drop of point', nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
+          <p class="form-control-static">
+            <%= image_tag asset_path("ride/search-to-plot.png"), class: "location_tag" %>
+            <%= @ride.destination_location.address %>
+          </p>
+        </div>
+      </div>
+      <hr class="horizontal-line"/>
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <%= label_tag 'Date', nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
+          <p class="form-control-static">
+            <%= @ride.departure_date.strftime("%A %d %B") %>
+          </p>
+        </div>
+      </div>
+      <hr class="horizontal-line"/>
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <%= label_tag 'Departure Time', nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
+          <p class="form-control-static">
+            <%= @ride.departure_date.strftime("%H:%M") %>
+          </p>
+        </div>
+      </div>
+      <hr class="horizontal-line"/>
+    </div>
+  </fieldset>
+  <div class="well col-sm-12 col-md-12">
+    <h2>trip details</h2>
+    <% if @self_user %>
+    <p class="bg-danger">
+      <%= link_to "Add details for your passengers", edit_ride_path(@ride) %>
+    </p>
+    <% end %>
+    <div class="col-md-9">
+      <div class="form-group">
+        <%= label_tag :Detour, nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-5">
+          <p class="form-control-static">
+            <%= GlobalConstants::Rides::DETOUR_PREFERENCES[@ride.detour_preferences].first rescue "not defined" %>
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= label_tag 'Schedule Flexibility', nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-5">
+          <p class="form-control-static">
+            <%= GlobalConstants::Rides::LEAVING_DELAY[@ride.leaving_delay].first rescue "not defined" %>
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= label_tag 'Language Size', nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-5">
+          <p class="form-control-static">
+            <%= @ride.max_luggage_size %>
+          </p>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= label_tag :car, nil, class: "col-sm-4 control-label" %>
+        <div class="col-sm-6">
+          <p class="form-control-static">
+            <% @car = @ride.car %>
+            <% if @car.blank? %>
+              <% if @self_user %>
+                <% if @user.cars.present? %>
+                  <%= form_for @ride, url: set_car_ride_path(@ride.id), html: {  class: 'form-horizontal', role: 'form' } do |f| %>
+                    <% @car_options = [["Choose", 0]] %>
+                        <%= f.select :car_id, options_for_select( @car_options.concat(current_user.cars.try(:collect) { |car| [car.car_name, car.id] }) ), {}, class: "form-control" %>    
+                  <% end %>
+                  <br/>
+                <% end %>
+                <%= link_to "Add new Car", new_car_path({ rid: @ride.id, fr: "rs" }), class: "btn btn-primary btn-sm" %>
+              <% else %>
+                Car not defined.
+              <% end %>
+            <% else %>
+                <%= @car.car_name %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <% if @car.present? %>
+          <% if @car.car_image.present? %>
+              <%= image_tag @car.picture, width: "150", height: "100", style: "width: 150px; height: 100px;" %>
+          <% elsif @self_user %>
+              <div class="show-upload-car text-center">
+                <%= image_tag @car.picture %>
+                <%= form_for @car, url: upload_image_car_path(@car), html: { multipart: true, class: 'form-horizontal', role: 'form' } do |f| %>
+                  <span class="btn btn-link fileinput-button">
+                    <span><strong>Upload photo</strong></span>
+                    <%= f.file_field :car_image, class: 'upload-attachment' %>
+                    <%= hidden_field_tag :rid, @ride.id %>
+                  </span>
+
+              <% end %>
+            </div>
+          <% else %>
+            <%= image_tag @car.picture %>
+          <% end %>
+      <% elsif @self_user %>
+          <p class="bg-danger">
+            <%= link_to "Add Car", new_car_path({ rid: @ride.id, fr: "rs" }) %>
+          </p>
+      <% end %>
+    </div>
+  </div>
+  <span class="right">Offer published: 09/06/2014 - Seen <%= @ride.views_count %> times</span>
+</div>
+<div class="well col-sm-3 col-md-3">
+  <div class="header-main-block clearfix row">
+    <span class="col-md-4 price-green">$ <%= @ride.routes.first.price %> </span>Per passenger
+  </div>
+  <div class="header-main-block clearfix row">
+    <span class="col-md-6"><%= @ride.number_of_seats %> seats left</span>
+  </div>
+  <span class="col-md-10">click to book your seat:</span>
+  <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#driver-contact">contact driver</button>
+</div>
+<div class="well col-sm-3 col-md-3">
+ <%= render 'user_description', heading: "Driver", profile_user: @user, self_user: @self_user %>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="driver-contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Contact <%= @user.display_first_last_name %> to inquire about or book your seat</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag contact_to_the_driver_ride_path(@ride.id), method: :get, role: "form" do %>
+            <% if @user.phone_number.public? %>
+              <div class="form-group">
+                <label>By phone:</label>
+                <h4 class="img-phone tip form-control-static"><%= @user.phone_no_with_ext(" ") %></h4>
+              </div>
+            <% end %>
+            <% if @self_user %>
+              you can't send to private message to yourself.
+            
+            <% else %>
+              <div class="row" style="margin-left: 10px;">
+                <div class="col-sm-10 well">
+                  <div class="form-group">
+                    <%= label_tag "By private message:" %>
+                    <%= text_area_tag "private_msg", nil, class: "form-control", rows: 4, placeholder: "Contact this driver via private message here: you can ask them about trip details and seat availability.", required: true %>
+                  </div>
+                  <%= submit_tag "Send", name: nil, class: "btn btn-primary" %>
+                </div>
+                <div class="col-sm-2">
+                  <%= image_tag @user.profile.picture("driver"), class: "img-responsive" %>
+                </div>
+              </div>
+
+              <div class="alert alert-info">
+                Once you have sent your message, We will notify this driver by SMS. This is free service.
+              </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

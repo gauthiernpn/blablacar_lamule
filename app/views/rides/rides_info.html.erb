@@ -1,0 +1,204 @@
+<script type="text/javascript">
+    $(function () {
+        $(".reverse-places").click(function () {
+          var temp = $("#ride_source").val();
+          $("#ride_source").val( $("#ride_destination").val() );
+          $("#ride_destination").val(temp);
+          $(this).parents('form').submit();
+        })
+        $(".slider-range").slider({
+            range: true,
+            min: 0,
+            max: 24,
+            step: 1,
+            values: [ $('#start_time').val(), $('#last_time').val() ],
+            slide: function (e, ui) {
+                var initial_hour = ui.values[0];
+                var final_hour = ui.values[1];
+                $('.start-time').html(initial_hour);
+                $('.last-time').html(final_hour);
+                $('#start_time').val(initial_hour);
+                $('#last_time').val(final_hour);
+            },
+            stop: function (e, ui) {
+                $(this).parents('form').submit();
+            }
+        });
+        $('.radio-profile').change(function () {
+            $(this).parents('form').submit();
+        });
+        $('#departure_date').change(function () {
+            $(this).parents('form').submit();
+        });
+
+        $('.sort-btn').click(function () {
+            $('#order_by').val($(this).attr('data-order-by'));
+            $(this).parents('form').submit();
+        });
+
+        $('#departure_date').datepicker({
+          dateFormat: "dd/mm/yy"
+        });
+    })
+</script>
+<br/>
+<%= form_tag rides_info_rides_path, class: 'form-horizontal' do %>
+    <div class="row well well-sm">
+    <span class="location-holder">
+        <%= text_field_tag :ride_source, params[:ride_source], autofocus: true, class: 'from form-control gmaps-input-address ride-info-maps-input', placeholder: "From" %>
+    </span>
+      <button tabindex="5" type="button" class="btn reverse-places text-center">
+        <img src="/assets/ride/reverse2.png" width="18" height="16" alt="Switch">
+      </button>
+    <span class=" location-holder">
+        <%= text_field_tag :ride_destination, params[:ride_destination], autofocus: true, class: 'to form-control gmaps-input-address ride-info-maps-input', placeholder: "To" %>
+    </span>
+      <%= submit_tag "Search", name: nil, class: "btn btn-warning" %>
+    </div>
+
+    <br/>
+
+
+
+
+
+    <div class="row">
+
+      <div class="side col-sm-3">
+        <h4>Date</h4>
+        <div>
+          <%= text_field_tag 'departure_date', params[:departure_date] || nil, class: 'departure_date_input', placeholder: "dd/mm/yy" %>
+          <div class="show-time-holder">
+            Time :
+        <span class="show-time">
+          <span class="start-time">
+            <%= params[:start_time] || 0 %>
+          </span>h - 
+          <span class="last-time">
+            <%= params[:last_time] || 24 %>
+          </span> 
+          h
+        </span>
+          </div>
+          <div class="slider-range"></div>
+          <%= hidden_field_tag :start_time, params[:start_time].to_i || 0 %>
+          <%= hidden_field_tag :last_time, params[:last_time].to_i || 24 %>
+          <%= hidden_field_tag :order_by, params[:order_by] || "departure_date ASC" %>
+        </div>
+        <hr>
+          <h4>Photo</h4>
+        <div class="col-sm-12">
+
+        <div class="radio">
+          <label>
+            <%= radio_button_tag :profile_photo, "only", @pro_pho_check, class: "radio-profile" %>
+            With photo only<span class="counter"><%= @rides_with_photo %></span>
+          </label>
+        </div>
+
+        <div class="radio">
+          <label>
+            <%= radio_button_tag :profile_photo, "all", !@pro_pho_check, class: "radio-profile" %>
+            All<span class="counter"><%= @rides.count %></span>
+          </label>
+        </div>  
+        </div>
+        
+      </div>
+      <div class="col-sm-9">
+        <div class="row">
+          <div class="col-md-12 ">
+            <div class="well">
+              <span><%= "#{@rides.count} rides available" %></span>
+              <span class="col-sm-4 pull-right">
+                  Rearrange by
+                <div class="btn-group">
+                  <a href="javascript:void(0);" data-order-by="total_price ASC" class="btn btn-default sort-btn <%= sort_btn_active(params[:order_by], "total_price ASC") %>">price</a>
+
+                  <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle  <%= sort_btn_active(params[:order_by], "departure_date DESC", "departure_date ASC") %>" type="button">
+                      Schedule
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="javascript:void(0);" data-order-by="departure_date ASC" class="sort-btn <%= sort_btn_active(params[:order_by], "departure_date ASC") %>">Earliest</a>
+                      </li>
+                      <li>
+                        <a href="javascript:void(0);" data-order-by="departure_date DESC" class="sort-btn <%= sort_btn_active(params[:order_by], "departure_date DESC") %>">Latest</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+            </span>
+            </div>
+          </div>
+        </div>
+
+        <% @rides.each do |ride| %>
+            <% @ride_user = ride.user %>
+            <% @ride_user_profile = @ride_user.profile %>
+            <div class="row">
+              <a href="<%= ride_path(ride) %>" class="trip-search-oneresult">
+                <div class="user col-sm-4">
+                  <%= image_tag @ride_user_profile.picture("driver"), class: "photo" %>
+                  <div class="user-info">
+                    <h2 class="username"><%= @ride_user.display_first_last_name %></h2>
+                    <%= @ride_user.age %>
+                    <br>
+                  </div>
+
+                  <div class="user-trust">
+                    <div class="rating-container"><span class="star-rating star_4_5"></span>15 ratings</div>
+                    <div>
+                      <%= image_tag 'user/fb-small.png', class: "inline-block" %> <%= ride.user.friends.count %> Friends
+
+                    </div>
+                    <p> <b>Chattiness: </b><%= GlobalConstants::Preferences::LEVELS_TEXT[@ride_user.preference.chattiness] %></p>
+                    <p> <b>Music: </b><%= GlobalConstants::Preferences::LEVELS_TEXT[@ride_user.preference.music] %></p>
+                    <p> <b>Smoking: </b> <%= GlobalConstants::Preferences::LEVELS_TEXT[@ride_user.preference.smoking] %></p>
+                    <p> <b>Pet: </b> <%= GlobalConstants::Preferences::LEVELS_TEXT[@ride_user.preference.pets] %></p>
+                  </div>
+                </div>
+                <div class="description col-sm-5">
+
+                  <h3 content="2014-06-18" itemprop="startDate" class="time"> <%= date_in_today_format(ride.departure_date) %></h3>
+                  <%= ride.show_sorce_destination_route %>
+                      <h4>Places</h4>
+
+                      <% ride.locations.each do |loc| %>
+                        <div class="ride-place">
+                          <%= loc.address %>      
+                        </div>
+                      <% end %>
+                  <dl>
+                    <% if ride.car.present? %>
+                        <dt>Car: <strong><%= ride.car.car_name %></strong></dt>
+                        <dd>
+                          <span title="Comfort: Luxury" class="rating-car star_4 tip">Comfort: <%= GlobalConstants::CAR_COMFORT_LEVEL[ride.car.level_of_comfort][0] %> </span>
+                        </dd>
+                    <% else %>
+                        <dt>Car: <strong>undefined</strong></dt>
+                    <% end %>
+                  </dl>
+                </div>
+
+                <div class="offer col-sm-3">
+
+                  <div itemprop="location" class="price price-red">
+                    <strong>
+                      <span style="font-size:33px;">$ <%= ride.total_price %></span>
+                    </strong>
+                    <span class="priceUnit">per passenger</span>
+                  </div>
+                  <div class="availability">
+                    <strong><%= ride.number_of_seats %></strong> <span>seats left</span>
+                  </div>
+
+                </div>
+              </a>
+            </div>
+        <% end %>
+      </div>
+    </div>
+<% end %>

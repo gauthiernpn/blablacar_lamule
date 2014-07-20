@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-sm-12">
+    <ul class="nav nav-pills nav-stacked"> 
+        <li class="list-message-item received">
+          <a href="/messages/received">  Private messages received 
+            <span class="label label-success"><%= @unread_received_message_thread %></span> 
+          </a>
+        </li>
+        <li class="list-message-item sent">
+          <a href="/messages/sent"> Sent messages
+            <span class="label label-success"><%= @unread_sent_message_thread %></span>
+          </a>
+        </li>
+        <li class="list-message-item archived"><a href="/messages/archived">Archived messages</a></li>                        
+    </ul>                    
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<%= hidden_field_tag "active-side-nav-link", "notifications" %>
+
+<%= form_for current_user, url: update_user_notifications_notifications_path, html: { class: 'form-horizontal', role: 'form' } do |user_form| %>
+
+    <fieldset>
+      <div class="main-block">
+        <div class="header-main-block clearfix">
+          <h2 class="pull-left">SMS notifications</h2>
+
+          <div class="title-complement pull-left size14"> / Sent to  <%= current_user.phone_no_with_ext(" ") %>
+            ( <%= link_to 'edit', general_profile_index_path %> )
+          </div>
+        </div>
+
+        <div class="content-main-block clearfix">
+          <h3 class="fade-gray size14 bold">Receive an SMS (for free) when:</h3>
+
+          <%= user_form.hidden_field :enable_notifications_validation, value: true %>
+          <%= user_form.fields_for :notifications, current_user.notifications.sms_notifications do |sn| %>
+
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <div class="checkbox">
+                    <%= sn.check_box :status, style: "margin: 4px 9px 0 0;" %>
+                    <%= sn.label :status, sn.object.text %>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+          <!-- end of sms notification field_for -->
+          <div>
+            <%= user_form.submit 'Save', class: "btn btn-primary" %>
+          </div>
+        </div>
+    </fieldset>
+<% end %>
+<!-- end of sms notification form_for -->
+
+<%= form_for current_user, url: update_user_notifications_notifications_path, html: { class: 'form-horizontal', role: 'form' } do |user_form| %>
+
+    <fieldset>
+      <div class="main-block">
+        <div class="header-main-block clearfix">
+          <h2 class="pull-left">Email notifications</h2>
+
+          <div class="title-complement pull-left size14"> / They will be sent to <%= current_user.email %>
+            ( <%= link_to 'edit', general_profile_index_path %> )
+          </div>
+        </div>
+
+        <div class="content-main-block clearfix">
+          <h3 class="fade-gray size14 bold">Receive an email notification when:</h3>
+
+          <%= user_form.hidden_field :enable_notifications_validation, value: true %>
+          <%= user_form.fields_for :notifications, current_user.notifications.email_notifications do |en| %>
+
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <div class="checkbox">
+                    <%= en.check_box :status, style: "margin: 4px 9px 0 0;" %>
+                    <%= en.label :status, en.object.text %>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+          <!-- end of sms notification field_for -->
+          <div>
+            <%= user_form.submit 'Save', class: "btn btn-primary" %>
+          </div>
+        </div>
+    </fieldset>
+<% end %>
+<!-- end of email notifications form_for -->

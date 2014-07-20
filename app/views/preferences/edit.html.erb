@@ -1,0 +1,61 @@
+<%= hidden_field_tag "active-side-nav-link", "preferences" %>
+<%= form_for @preference, html: { class: 'well form-horizontal', role: 'form' } do |f| %>
+
+    <fieldset>
+      <h2>Your ride sharing preferences</h2>
+
+      <div class="form-group">
+        <%= f.label :chattiness, class: "col-sm-3 control-label" %>
+        <div class="col-sm-8">
+          <%= f.radio_button :chattiness, 0, :checked => true %>
+          <%= label :chattiness_0, GlobalConstants::Preferences::LEVELS_TEXT[0] %>
+          <%= f.radio_button :chattiness, 1 %>
+          <%= label :chattiness_1, GlobalConstants::Preferences::LEVELS_TEXT[1] %>
+          <%= f.radio_button :chattiness, 2 %>
+          <%= label :chattiness_2, GlobalConstants::Preferences::LEVELS_TEXT[2] %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :music, class: "col-sm-3 control-label" %>
+        <div class="col-sm-8">
+          <%= f.radio_button :music, 0, :checked => true %>
+          <%= label :music_0, GlobalConstants::Preferences::LEVELS_TEXT[0] %>
+          <%= f.radio_button :music, 1 %>
+          <%= label :music_1, GlobalConstants::Preferences::LEVELS_TEXT[1] %>
+          <%= f.radio_button :music, 2 %>
+          <%= label :music_2, GlobalConstants::Preferences::LEVELS_TEXT[2] %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :smoking, class: "col-sm-3 control-label" %>
+        <div class="col-sm-8">
+          <%= f.radio_button :smoking, 0, :checked => true %>
+          <%= label :smoking_0, GlobalConstants::Preferences::LEVELS_TEXT[0] %>
+          <%= f.radio_button :smoking, 1 %>
+          <%= label :smoking_1, GlobalConstants::Preferences::LEVELS_TEXT[1] %>
+          <%= f.radio_button :smoking, 2 %>
+          <%= label :smoking_2, GlobalConstants::Preferences::LEVELS_TEXT[2] %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :pets, class: "col-sm-3 control-label" %>
+        <div class="col-sm-8">
+          <%= f.radio_button :pets, 0, :checked => true %>
+          <%= label :pets_0, GlobalConstants::Preferences::LEVELS_TEXT[0] %>
+          <%= f.radio_button :pets, 1 %>
+          <%= label :pets_1, GlobalConstants::Preferences::LEVELS_TEXT[1] %>
+          <%= f.radio_button :pets, 2 %>
+          <%= label :pets_2, GlobalConstants::Preferences::LEVELS_TEXT[2] %>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="col-sm-offset-2">
+      <%= f.submit 'Save', class: "btn btn-primary" %>
+
+    </div>
+<% end %>
+<!-- end of form_for -->

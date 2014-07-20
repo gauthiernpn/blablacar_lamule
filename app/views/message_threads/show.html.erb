@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-sm-9 col-md-9 message-thread-holder" data-mt-id ="<%= @message_thread.id %>" >
+    <h3>
+      <%= link_to "Trip from #{@ride.source_location.get_route_name} to #{@ride.destination_location.get_route_name} - #{date_in_today_format(@ride.departure_date)}", ride_path(@ride.id) %> 
+      </h3>
+      <% @messages.each do |msg| %>
+        <% if msg.message_type == GlobalConstants::Messages::TYPE[:received] %>
+          <div class="trip-qa">
+            <%= render "show_message", msg: msg, user: @communicator, holder_class: "pull-left msg-photo-container" %>
+          </div>
+        <% else %> 
+          <div class="trip-my-qa">      
+            <%= render "show_message", msg: msg, user: @user, holder_class: "pull-right msg-photo-container" %>
+          </div>
+        <% end %>
+      <% end %>
+
+
+    <div class=" trip-qa ">
+      <div class="pull-right msg-photo-container">
+        <%= render "show_user_picture", user: @user %>                
+      </div>
+      <div class="msg-comment">
+          <%= form_for [@message_thread, @message], method: :post, html: { role: 'form' } do |f| %>
+            <%= f.text_area :body, class: "form-control", rows: "3", required: true, placeholder: "Contact this driver via private message here: you can ask them about trip details and seat availability." %>
+            <%= f.submit 'Send', class: "btn btn-primary" %>
+          <% end %>
+      </div>
+    </div>
+    <% if @message_thread.status == GlobalConstants::MessageThreads::STATUS[:archived] %>
+      <button class="btn btn-danger pull-right delete-message" type="button">Delete this conversation</button>
+    <% else %>
+      <button class="btn btn-warning pull-right archive-message" type="button">Archive this conversation</button>
+    <% end %>
+    
+  </div>
+  <div class="col-sm-3 col-md-3">
+      <div class="row well feedback_block">
+      <h4><i class="glyphicon glyphicon-star "></i> Your feedback is important!</h4>
+      <p>Have you shared a ride with Rrrzae A?
+Tell us about your experience by leaving a rating! You will help build trust in the community.</p>  <button type="button" class="btn btn-warning btn-block">Leave a rating now</button>
+      </div>
+      
+    <div class="well row">
+    <%= render '/rides/user_description', heading: "Messaging with:", profile_user: @communicator, self_user: false %>
+    </div>
+  </div>
+</div>
+  

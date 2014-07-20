@@ -1,0 +1,24 @@
+<div class="<%= holder_class %>">
+  <%= render "show_user_picture", user: user %>  
+</div>
+
+<div class="msg-comment">
+  <h4>
+    <strong>
+      <%= user.display_first_last_name %>:
+    </strong>
+  </h4>
+  <% if (current_user.id ==  user.id || user.phone_number.public?) && user.phone_number.body.present? %>
+    <span class="tel-num img-phone"><%= user.phone_no_with_ext(" ") %></span>
+  <% end %> 
+  <p><%= msg.body %></p>
+  <p class="msg-date pull-right">
+    <%= date_in_today_format(msg.created_at) %>
+    <% if current_user.id != user.id %>
+      <span>
+          <!-- <a href="/report-message" class="alert-flag tip"></a> -->
+        <a href="javascript:void(0);" class="glyphicon glyphicon-flag color-yellow"></a>
+      </span>
+    <% end %>
+  </p>
+</div>
